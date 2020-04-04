@@ -1,0 +1,22 @@
+.App {
+  width: 80%;
+  margin: auto;
+  border: 1px solid grey;
+  background-color: rgba(51, 51, 51, 0.308);
+  padding: 40px;
+  display: flex;
+}
+
+.form-container {
+  width: 40%;
+  background-color: whitesmoke;
+  padding: 15px;
+  margin: 15px;
+  height: 200px;
+}
+.users-container {
+  width: 60%;
+  background-color: whitesmoke;
+  padding: 15px;
+  margin: 15px;
+}
