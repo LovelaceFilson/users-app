@@ -1,42 +1,46 @@
-import React, { Component } from 'react';
+import React, { Component } from "react";
+import { connect } from "react-redux";
+import { editUser } from "../store/actions";
 
-export class AddUserForm extends Component {
+export class EditForm extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      name: "",
-      email: "",
-      gen: ""
+      name: props.user.name,
+      email: props.user.email,
+      gen: props.user.gen,
     };
+    this.id = props.match.params.id;
   }
 
-  handleChange = e => {
+  handleChange = (e) => {
     this.setState({
-      [e.target.name]: e.target.value
+      [e.target.name]: e.target.value,
     });
-    console.log(this.state.name);
   };
 
-  handleSubmit = e => {
+  handleSubmit = (e) => {
     e.preventDefault();
-    const newUser = {
+    const updatedInfo = {
       name: this.state.name,
       email: this.state.email,
-      gen: this.state.gen
+      gen: this.state.gen,
     };
-    this.props.addUser(newUser)
+
+    this.props.editUser(this.id, updatedInfo);
     this.setState({
       name: "",
       email: "",
-      gen: ""
+      gen: "",
     });
+    this.props.history.push("/");
   };
 
   render() {
     return (
-      <form onSubmit={this.handleSubmit}>
+      <form onSubmit={this.handleSubmit} className="App__user-form">
         <div className="form-control">
-          <label>Full name</label>
+          <label>Name</label>
           <input
             type="text"
             name="name"
@@ -63,12 +67,21 @@ export class AddUserForm extends Component {
           />
         </div>
         <div>
-          <button type="submit">Save user</button>
+          <button type="submit">Update user</button>
         </div>
       </form>
-
     );
   }
 }
 
-export default AddUserForm;
+const mapStateToProps = (state, ownProps) => ({
+  user: state.usersState.users.find(
+    (user) => user.id === ownProps.match.params.id
+  ),
+});
+
+const mapDispatchToProps = {
+  editUser: editUser,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(EditForm);

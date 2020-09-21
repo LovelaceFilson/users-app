@@ -1,39 +1,35 @@
+import { v4 as uuid } from 'uuid';
+
 const initialState = {
-    users: [
-        {
-            name: "Barnbara Filson",
-            email: "babs@email.com",
-            gen: 1
-        },
-        {
-            name: "Lacey Filson",
-            email: "lacey@email.com",
-            gen: 6
-        },
-        {
-            name: "Basky Lincoln",
-            email: "basky@email.com",
-            gen: 3
-        },
-        {
-            name: "Lucci Hendrix",
-            email: "lucci@email.com",
-            gen: 3
-        }
-    ]
-
-
-}
+    users: [],
+};
 
 const usersReducer = (state = initialState, action) => {
     switch (action.type) {
         case "ADD_USER":
             const newUser = {
+                id: uuid(), 
                 name: action.payload.name,
                 email: action.payload.email,
                 gen: action.payload.gen
             };
-            return { ...state, users: [...state.users, newUser] }
+            return { ...state, users: [...state.users, newUser] };
+
+        case "DELETE_USER":
+            const filteredUsers = state.users.filter(user => user.id !== action.payload);
+            return { ...state, users: filteredUsers}
+
+        case "EDIT_USER":
+            const editedUsers = state.users.map(user => {
+                if (user.id === action.user_id) {
+                    return { ...user, ...action.updated_info}
+                } else {
+                    return user;
+                }
+            });
+            return { ...state, users: editedUsers }
+            case "SET_ALL_USERS":
+                return { users: action.payload };
 
         default:
             return state;
